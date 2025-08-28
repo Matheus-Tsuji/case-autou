@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
@@ -29,7 +30,7 @@
             <div class="container">
                 <div class="boxPrincipal">
                     <div class="boxPrincipal-conteudo">
-                        <!-- Área para digitar o e-mail -->
+                        <!-- Área para digitar o e-mail (usuário pode colar ou digitar o texto) -->
                         <div class="inserirEmail">
                             <span>
                                 <i data-lucide="file" style="width: 32px; height: 32px; stroke-width: 2.5; color: #F5551C;"></i>
@@ -47,14 +48,14 @@
                             </form>
                         </div>
 
-                        <!-- Divisor visual entre as opções -->
+                        <!-- Divisor visual entre as opções (texto OU upload) -->
                         <div class="divisor">
                             <div class="linha-vertical"></div>
                             <span>OU</span>
                             <div class="linha-vertical"></div>
                         </div>
 
-                        <!-- Área para upload de arquivo -->
+                        <!-- Área para upload de arquivo (.pdf ou .docx) -->
                         <div class="uploadArquivo">
                             <span>
                                 <i data-lucide="folder-up" style="width: 32px; height: 32px; stroke-width: 2.5; color: #F5551C;"></i>
@@ -73,7 +74,7 @@
                     <!-- Botão para acionar a análise -->
                     <button id="btnAnalisar" class="btn-analisar">Analisar</button>
                 </div>
-                <!-- Área onde aparecem os resultados -->
+                <!-- Área onde aparecem os resultados da análise -->
                 <div class="boxSecundario hidden" id="boxAnaliseResultados"></div>
             </div>
         </main>
@@ -81,12 +82,12 @@
         <!-- =============================== -->
         <!-- 3. SCRIPTS E ANIMAÇÕES          -->
         <!-- =============================== -->
-        <!-- Animação de Página com GSAP -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script> -->
-        <!-- Ícones Lucide -->
+        <!-- Animação de Página com GSAP (efeitos visuais) -->
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+        <!-- Ícones Lucide (SVG) -->
         <script src="https://unpkg.com/lucide@latest"></script>
         <script>lucide.createIcons();</script>
-        <!-- JS principal do projeto -->
+        <!-- JS principal do projeto (toda a lógica da interface) -->
         <script src="script.js"></script>
     </body>
 </html>
