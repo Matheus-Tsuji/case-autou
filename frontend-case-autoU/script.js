@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
 
                 // Faz a requisição para a API Flask
-                fetch('/api/app', {
+                fetch('C:\Users\Usuário\Desktop\Case-Prático-AutoU\api\app', {
                     method: 'POST',
                     body: formData
                 })
