@@ -1,0 +1,429 @@
+
+/* =============================== */
+/* 1. RESET E VARIÁVEIS GLOBAIS    */
+/* =============================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Helvetica, sans-serif;
+}
+:root {
+    --corAzulEscuro: #082236;
+    --corBranca: #efede3;
+    --corPreta: #0a0a0a;
+    --corCinza: #646464;
+    --corLaranja: #F5551C;
+    --fonteInter: 'Inter', sans-serif;
+    --fonteRobotoMono: 'Roboto Mono', monospace;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--fonteInter);
+    overflow-x: hidden; /* Evita barras de rolagem horizontal */
+}
+body {
+    background-color: var(--corAzulEscuro);
+    color: var(--corAzulEscuro);
+    padding: 4rem 0;
+}
+
+/* =============================== */
+/* 2. ESTRUTURA BÁSICA E CONTAINER */
+/* =============================== */
+.container {
+    width: 64%;
+    margin: 0 auto;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+ul, li {
+    list-style: none;
+}
+textarea {
+    resize: none;
+    outline: none;
+    padding: .75rem;
+}
+label {
+    font-weight: 600;
+    font-family: var(--fonteRobotoMono);
+    color: var(--corCinza);
+}
+
+/* =============================== */
+/* 3. CABEÇALHO E TÍTULOS         */
+/* =============================== */
+header {
+    margin-bottom: 4rem;
+    text-align: center;
+    color: var(--corBranca);
+    opacity: 0; /* Escondido para animar com GSAP */
+    visibility: hidden;
+}
+header .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+header p {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #b9b4bf;
+    width: 72%;
+    font-family: var(--fonteRobotoMono);
+}
+
+/* =============================== */
+/* 4. FORMULÁRIO PRINCIPAL         */
+/* =============================== */
+.boxPrincipal {
+    background-color: var(--corBranca);
+    color: var(--corAzulEscuro);
+    padding: 2rem;
+    border-radius: .5rem;
+    border: 2px solid #a19d88;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    opacity: 0; /* Escondido para animar com GSAP */
+    visibility: hidden;
+}
+.boxPrincipal-conteudo {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2rem;
+}
+.inserirEmail, .uploadArquivo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.inserirEmail span h4,
+.uploadArquivo span h4 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: .5rem;
+    font-family: var(--fonteInter);
+}
+.inserirEmail span,
+.uploadArquivo span {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+.inserirEmail form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+/* =============================== */
+/* 5. UPLOAD DE ARQUIVO            */
+/* =============================== */
+.upload-box {
+    height: 100%;
+    background-color: #e6e2ce;
+    border: 2px dashed #bdb9b9;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 1rem;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.upload-box.dragover {
+    background-color: #d5d1bd;
+    border-color: var(--corAzulEscuro);
+}
+.upload-box:hover {
+    background-color: #d5d1bd;
+    border-color: #a4a4a4;
+}
+.upload-box .upload-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--corLaranja);
+    stroke-width: 2;
+}
+.upload-box .upload-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--corAzulEscuro);
+    font-family: var(--fonteInter);
+    margin: 0;
+}
+.upload-box .upload-formats {
+    font-size: 0.85rem;
+    color: var(--corCinza);
+    font-family: var(--fonteRobotoMono);
+}
+.file-name-display {
+    font-size: 0.9rem;
+    color: var(--corCinza);
+    font-family: var(--fonteRobotoMono);
+    margin-top: 1rem;
+}
+
+/* =============================== */
+/* 6. DIVISOR VISUAL               */
+/* =============================== */
+.divisor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 1rem;
+    color: #999;
+    font-family: var(--fonteRobotoMono);
+    font-weight: 400;
+}
+.linha-vertical {
+    width: 2px;
+    height: 100%;
+    background-color: #ccc;
+}
+
+/* =============================== */
+/* 7. BOTÃO PRINCIPAL              */
+/* =============================== */
+.btn-analisar {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: var(--fonteInter);
+    color: var(--corBranca);
+    background-color: var(--corLaranja);
+    border: none;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn-analisar:hover {
+    background-color: #d94a16;
+}
+
+/* =============================== */
+/* 8. ÁREA DE RESULTADOS           */
+/* =============================== */
+.boxSecundario {
+    background-color: var(--corBranca);
+    color: var(--corAzulEscuro);
+    padding: 2rem;
+    border-radius: .5rem;
+    border: 2px solid #a19d88;
+    margin-top: 2rem;
+}
+.hidden {
+    display: none;
+}
+
+/* =============================== */
+/* 9. LOADING E ANIMAÇÃO           */
+/* =============================== */
+.analise-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 200px;
+}
+.analise-loading h4 {
+    font-family: var(--fonteRobotoMono);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 4px solid #ccc;
+    border-top-color: var(--corAzulEscuro);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =============================== */
+/* 10. TEXTAREAS E RESULTADOS      */
+/* =============================== */
+.inserirEmail form > textarea,
+.resposta-textarea {
+    width: 100%;
+    padding: .75rem;
+    border-radius: .5rem;
+    border: 2px solid #bdb9b9;
+    background-color: #f8f6f3;
+    font-family: var(--fonteRobotoMono);
+    color: var(--corAzulEscuro);
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+}
+.inserirEmail form > textarea {
+    height: 100%;
+    min-height: 200px;
+}
+.inserirEmail form > textarea:focus {
+    border: 2px solid var(--corAzulEscuro);
+}
+.resposta-textarea {
+    min-height: 150px;
+}
+
+/* =============================== */
+/* 11. RESULTADOS (VISUAL)         */
+/* =============================== */
+.resultados-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.resultados-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+}
+.classificacao-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: .5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.classificacao-tag.improdutivo {
+    background-color: var(--corAzulEscuro);
+    color: var(--corBranca);
+}
+.classificacao-tag.produtivo {
+    background-color: #166534;
+    color: #dcfce7;
+}
+.resultados-analise-section {
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+.coluna-titulo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--corAzulEscuro);
+    margin-bottom: 0.75rem;
+}
+.coluna-titulo i {
+    color: var(--corLaranja);
+}
+.resultados-analise-section p {
+    font-family: var(--fonteRobotoMono);
+    color: var(--corCinza);
+    line-height: 1.6;
+}
+.resultados-resposta-section {
+    margin-top: 1rem;
+}
+.resposta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    font-family: var(--fonteRobotoMono);
+    color: var(--corCinza);
+    margin-bottom: 0.75rem;
+}
+.resposta-header span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.btn-copiar {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 0.3rem 0.6rem;
+    border-radius: .3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: background-color 0.2s;
+}
+.btn-copiar:hover {
+    background-color: #e6e2ce;
+}
+.btn-copiar:active {
+    background-color: #d5d1bd;
+}
+
+/* =============================== */
+/* 12. RESPONSIVIDADE              */
+/* =============================== */
+@media (max-width: 992px) {
+    .container {
+        width: 80%; /* Largura maior em tablets */
+    }
+}
+@media (max-width: 768px) {
+    body {
+        padding: 2rem 0;
+    }
+    .container {
+        width: 90%;
+    }
+    header {
+        margin-bottom: 2.5rem;
+    }
+    header h1 {
+        font-size: 1.8rem;
+        line-height: 1.3;
+    }
+    header p {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+    .boxPrincipal {
+        padding: 1.5rem;
+    }
+    .boxPrincipal-conteudo {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .divisor {
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+    .linha-vertical {
+        width: 100%;
+        height: 2px;
+    }
+    .inserirEmail span h4,
+    .uploadArquivo span h4 {
+        font-size: 1.5rem;
+    }
+    .coluna-titulo {
+        font-size: 1.15rem;
+    }
+    .boxSecundario {
+        padding: 1.5rem;
+    }
+}

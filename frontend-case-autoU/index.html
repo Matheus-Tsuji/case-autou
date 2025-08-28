@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>InsightMail</title>
+        <!-- Google Fonts: fontes para títulos e textos -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+        <!-- CSS principal do projeto -->
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <!-- =============================== -->
+        <!-- 1. CABEÇALHO DO SISTEMA         -->
+        <!-- =============================== -->
+        <header>
+            <div class="container">
+                <h1>Sistema de Classificação Inteligente de E-mails</h1>
+                <p>Nossa IA classifica e-mails em produtivos ou improdutivos e sugere respostas automáticas para que sua equipe foque no que realmente importa.</p>
+            </div>
+        </header>
+
+        <!-- =============================== -->
+        <!-- 2. CONTEÚDO PRINCIPAL           -->
+        <!-- =============================== -->
+        <main>
+            <div class="container">
+                <div class="boxPrincipal">
+                    <div class="boxPrincipal-conteudo">
+                        <!-- Área para digitar o e-mail -->
+                        <div class="inserirEmail">
+                            <span>
+                                <i data-lucide="file" style="width: 32px; height: 32px; stroke-width: 2.5; color: #F5551C;"></i>
+                                <h4>Inserir E-mail</h4>
+                            </span>
+                            <label for="txtEmail">Conteúdo do E-mail:</label>
+                            <form action="">
+                                <textarea 
+                                    name="txtEmail" 
+                                    id="txtEmail" 
+                                    cols="30" 
+                                    rows="10" 
+                                    placeholder="Digite o conteúdo do e-mail aqui..."
+                                    autocomplete="off"></textarea>
+                            </form>
+                        </div>
+
+                        <!-- Divisor visual entre as opções -->
+                        <div class="divisor">
+                            <div class="linha-vertical"></div>
+                            <span>OU</span>
+                            <div class="linha-vertical"></div>
+                        </div>
+
+                        <!-- Área para upload de arquivo -->
+                        <div class="uploadArquivo">
+                            <span>
+                                <i data-lucide="folder-up" style="width: 32px; height: 32px; stroke-width: 2.5; color: #F5551C;"></i>
+                                <h4>Upload de Arquivo</h4>
+                            </span>
+                            <label for="fileUpload" class="upload-button">Selecionar Arquivo</label>
+                            <div class="upload-box" id="uploadBox">
+                                <i data-lucide="upload" class="upload-icon"></i>
+                                <p class="upload-text">Arraste arquivo ou clique para selecionar</p>
+                                <p class="upload-formats">Formatos suportados: .pdf, .docx (máx. 10MB)</p>
+                                <input type="file" id="fileUpload" name="fileUpload" accept=".pdf,.docx" style="display: none;">
+                                <span id="fileNameDisplay" class="file-name-display">Nenhum arquivo selecionado.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botão para acionar a análise -->
+                    <button id="btnAnalisar" class="btn-analisar">Analisar</button>
+                </div>
+                <!-- Área onde aparecem os resultados -->
+                <div class="boxSecundario hidden" id="boxAnaliseResultados"></div>
+            </div>
+        </main>
+
+        <!-- =============================== -->
+        <!-- 3. SCRIPTS E ANIMAÇÕES          -->
+        <!-- =============================== -->
+        <!-- Animação de Página com GSAP -->
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+        <!-- Ícones Lucide -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script>lucide.createIcons();</script>
+        <!-- JS principal do projeto -->
+        <script src="script.js"></script>
+    </body>
+</html>
