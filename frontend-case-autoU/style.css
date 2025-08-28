@@ -427,21 +427,3 @@ header p {
         padding: 1.5rem;
     }
 }
-
-
-
-/* =============================== */
-/* CÓDIGO TEMPORÁRIO DE DEPURAÇÃO */
-/* =============================== */
-
-/* Força os elementos principais a serem visíveis */
-header, main {
-    visibility: visible !important;
-    opacity: 1 !important;
-    display: block !important; /* Garante que não está como 'none' */
-}
-
-/* Adiciona uma borda vermelha em TUDO para podermos ver as caixas */
-* {
-    border: 1px solid red !important;
-}
