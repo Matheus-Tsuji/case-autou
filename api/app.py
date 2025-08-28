@@ -31,7 +31,7 @@ def ler_arquivo_pdf(arquivo_stream):
         return ""
 
 # === Rota principal da API: análise de e-mail ===
-@app.route('/analisar', methods=['POST'])
+@app.route('/api/app', methods=['POST'])
 def analisar_email():
     """
     Recebe texto ou arquivo do frontend, consolida o conteúdo e envia para análise da IA.
