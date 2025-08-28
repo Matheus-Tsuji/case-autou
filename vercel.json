@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "backend-case-autoU/app.py",
@@ -7,8 +8,12 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/analisar",
       "dest": "backend-case-autoU/app.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend-case-autoU/$1"
     }
   ]
 }
