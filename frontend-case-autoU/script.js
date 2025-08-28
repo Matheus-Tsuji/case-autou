@@ -150,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
                 formData.append('texto', txtEmail.value);
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
-                
-                // LÓGICA DE URL INTELIGENTE PARA FUNCIONAR LOCAL E NO DEPLOY
+
+                // Lógica de URL inteligente que funciona localmente E no deploy
                 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
                 const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '/api/app';
 
