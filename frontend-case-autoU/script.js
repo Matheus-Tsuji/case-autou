@@ -2,17 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===============================
     // 1. Seleção dos elementos da interface
     // ===============================
-    const uploadBox = document.getElementById('uploadBox'); // Área de upload (drag & drop)
-    const fileUpload = document.getElementById('fileUpload'); // Input de arquivo
-    const fileNameDisplay = document.getElementById('fileNameDisplay'); // Exibe nome do arquivo
-    const btnAnalisar = document.getElementById('btnAnalisar'); // Botão principal
-    const txtEmail = document.getElementById('txtEmail'); // Textarea do e-mail
-    const boxAnaliseResultados = document.getElementById('boxAnaliseResultados'); // Área de resultados
+    const uploadBox = document.getElementById('uploadBox');
+    const fileUpload = document.getElementById('fileUpload');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const btnAnalisar = document.getElementById('btnAnalisar');
+    const txtEmail = document.getElementById('txtEmail');
+    const boxAnaliseResultados = document.getElementById('boxAnaliseResultados');
 
     // ===============================
     // 2. Animação inicial da página (GSAP)
     // ===============================
-    // Cria uma timeline para animar header e formulário ao carregar
+    lucide.createIcons();
+    gsap.set(['header', '.boxPrincipal'], { autoAlpha: 0 });
     const tl = gsap.timeline();
     tl.to("header", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
       .to(".boxPrincipal", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
@@ -20,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===============================
     // 3. Upload de arquivo: drag & drop e seleção manual
     // ===============================
-    // Atualiza o nome do arquivo exibido ao usuário
     function atualizarNomeArquivo(input) {
         if (input.files.length > 0) {
             fileNameDisplay.textContent = input.files[0].name;
@@ -28,10 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
             fileNameDisplay.textContent = 'Nenhum arquivo selecionado.';
         }
     }
-    // Eventos de clique, arrastar e soltar para upload
     if (uploadBox) {
         uploadBox.addEventListener('click', () => fileUpload.click());
-        fileUpload.addEventListener('change', () => atualizarNomeArquivo(fileUpload));
+        uploadBox.addEventListener('change', () => atualizarNomeArquivo(fileUpload));
         uploadBox.addEventListener('dragover', (event) => {
             event.preventDefault();
             uploadBox.classList.add('dragover');
@@ -50,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===============================
     // 4. Sincronização dos inputs (texto x arquivo)
     // ===============================
-    // Se selecionar arquivo, limpa textarea. Se digitar, limpa arquivo.
     fileUpload.addEventListener('change', () => {
         if (fileUpload.files.length > 0) txtEmail.value = '';
     });
@@ -74,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===============================
     // 6. Monta o HTML dos resultados da análise
     // ===============================
-    // Recebe o objeto de resposta da API e gera o bloco de resultados
     const createResultadosHTML = (dados) => {
         const tagClass = dados.classificacao.toLowerCase().includes('improdutivo') ? 'improdutivo' : 'produtivo';
         return `
@@ -104,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===============================
     // 7. Animação dos resultados (GSAP)
     // ===============================
-    // Anima cada bloco do resultado para entrada suave
     function animarResultados() {
         const elementos = document.querySelectorAll('.resultados-container > *');
         gsap.from(elementos, {
@@ -119,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===============================
     // 8. Botão de copiar resposta sugerida
     // ===============================
-    // Permite copiar a resposta sugerida para a área de transferência
     function ativarBotaoCopiar() {
         const btnCopiar = document.getElementById('btnCopiar');
         if (btnCopiar) {
@@ -147,22 +142,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const temArquivo = fileUpload.files.length > 0;
 
             if (temTexto || temArquivo) {
-                // Anima o formulário principal durante a requisição
                 gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
-
                 boxAnaliseResultados.innerHTML = loadingHTML;
                 boxAnaliseResultados.classList.remove('hidden');
-
-                // Anima a entrada da caixa de resultados
                 gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out", delay: 0.2 });
 
-                // Prepara dados do formulário para enviar ao backend
                 const formData = new FormData();
                 formData.append('texto', txtEmail.value);
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
+                
+                // LÓGICA DE URL INTELIGENTE PARA FUNCIONAR LOCAL E NO DEPLOY
+                const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+                const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '/api/app';
 
-                // Faz a requisição para a API Flask
-                fetch('C:\Users\Usuário\Desktop\Case-Prático-AutoU\api\app', {
+                fetch(apiURL, {
                     method: 'POST',
                     body: formData
                 })
@@ -172,11 +165,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(data => {
                     boxAnaliseResultados.innerHTML = createResultadosHTML(data);
-                    animarResultados(); // Anima os resultados
+                    animarResultados();
                     boxAnaliseResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     lucide.createIcons();
                     ativarBotaoCopiar();
-                    // Retorna a opacidade do formulário principal
                     gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
                 })
                 .catch(error => {
