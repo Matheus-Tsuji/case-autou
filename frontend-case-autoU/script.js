@@ -1,7 +1,11 @@
+// Cole este código completo no seu script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // ===============================
-    // 1. Seleção dos elementos da interface
-    // ===============================
+    lucide.createIcons();
+    gsap.set(['header', '.boxPrincipal'], { autoAlpha: 0 });
+    const tl = gsap.timeline();
+    tl.to("header", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
+      .to(".boxPrincipal", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
+
     const uploadBox = document.getElementById('uploadBox');
     const fileUpload = document.getElementById('fileUpload');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
@@ -9,18 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const txtEmail = document.getElementById('txtEmail');
     const boxAnaliseResultados = document.getElementById('boxAnaliseResultados');
 
-    // ===============================
-    // 2. Animação inicial da página (GSAP)
-    // ===============================
-    lucide.createIcons();
-    gsap.set(['header', '.boxPrincipal'], { autoAlpha: 0 });
-    const tl = gsap.timeline();
-    tl.to("header", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
-      .to(".boxPrincipal", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
-
-    // ===============================
-    // 3. Upload de arquivo: drag & drop e seleção manual
-    // ===============================
     function atualizarNomeArquivo(input) {
         if (input.files.length > 0) {
             fileNameDisplay.textContent = input.files[0].name;
@@ -28,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fileNameDisplay.textContent = 'Nenhum arquivo selecionado.';
         }
     }
+
     if (uploadBox) {
         uploadBox.addEventListener('click', () => fileUpload.click());
         uploadBox.addEventListener('change', () => atualizarNomeArquivo(fileUpload));
@@ -46,12 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ===============================
-    // 4. Sincronização dos inputs (texto x arquivo)
-    // ===============================
     fileUpload.addEventListener('change', () => {
         if (fileUpload.files.length > 0) txtEmail.value = '';
     });
+
     txtEmail.addEventListener('input', () => {
         if (txtEmail.value.trim() !== '' && fileUpload.files.length > 0) {
             fileUpload.value = null;
@@ -59,62 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ===============================
-    // 5. HTML de loading durante análise
-    // ===============================
-    const loadingHTML = `
-        <div class="analise-loading">
-            <span class="loading-spinner"></span>
-            <h4>Analisando<span>...</span></h4>
-        </div>
-    `;
+    const loadingHTML = `<div class="analise-loading"><span class="loading-spinner"></span><h4>Analisando...</h4></div>`;
 
-    // ===============================
-    // 6. Monta o HTML dos resultados da análise
-    // ===============================
     const createResultadosHTML = (dados) => {
         const tagClass = dados.classificacao.toLowerCase().includes('improdutivo') ? 'improdutivo' : 'produtivo';
-        return `
-            <div class="resultados-container">
-                <div class="resultados-header">
-                    <div class="classificacao-tag ${tagClass}">
-                        <i data-lucide="info"></i>
-                        <span>${dados.classificacao}</span>
-                    </div>
-                </div>
-                <div class="resultados-analise-section">
-                    <h5 class="coluna-titulo"><i data-lucide="lightbulb"></i> Análise do Algoritmo</h5>
-                    <p>${dados.analise}</p>
-                </div>
-                <div class="resultados-resposta-section">
-                    <h5 class="coluna-titulo"><i data-lucide="message-square" style="color: #F5551C; stroke-width: 2"></i> Resposta Sugerida</h5>
-                    <div class="resposta-header">
-                        <span><i data-lucide="history"></i>Resposta gerada automaticamente</span>
-                        <button id="btnCopiar" class="btn-copiar"><i data-lucide="clipboard"></i> Copiar</button>
-                    </div>
-                    <textarea id="respostaTexto" class="resposta-textarea" readonly>${dados.resposta}</textarea>
-                </div>
-            </div>
-        `;
+        return `<div class="resultados-container"><div class="resultados-header"><div class="classificacao-tag ${tagClass}"><i data-lucide="info"></i><span>${dados.classificacao}</span></div></div><div class="resultados-analise-section"><h5 class="coluna-titulo"><i data-lucide="lightbulb"></i> Análise do Algoritmo</h5><p>${dados.analise}</p></div><div class="resultados-resposta-section"><h5 class="coluna-titulo"><i data-lucide="message-square" style="color: #F5551C; stroke-width: 2"></i> Resposta Sugerida</h5><div class="resposta-header"><span><i data-lucide="history"></i>Resposta gerada automaticamente</span><button id="btnCopiar" class="btn-copiar"><i data-lucide="clipboard"></i> Copiar</button></div><textarea id="respostaTexto" class="resposta-textarea" readonly>${dados.resposta}</textarea></div></div>`;
     };
 
-    // ===============================
-    // 7. Animação dos resultados (GSAP)
-    // ===============================
-    function animarResultados() {
-        const elementos = document.querySelectorAll('.resultados-container > *');
-        gsap.from(elementos, {
-            duration: 0.6,
-            y: 30,
-            autoAlpha: 0,
-            stagger: 0.15,
-            ease: "power2.out"
-        });
-    }
-
-    // ===============================
-    // 8. Botão de copiar resposta sugerida
-    // ===============================
     function ativarBotaoCopiar() {
         const btnCopiar = document.getElementById('btnCopiar');
         if (btnCopiar) {
@@ -133,27 +75,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ===============================
-    // 9. Clique no botão "Analisar" (envia dados, anima, exibe resultado)
-    // ===============================
     if (btnAnalisar) {
         btnAnalisar.addEventListener('click', () => {
             const temTexto = txtEmail.value.trim() !== '';
             const temArquivo = fileUpload.files.length > 0;
-
             if (temTexto || temArquivo) {
                 gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
                 boxAnaliseResultados.innerHTML = loadingHTML;
                 boxAnaliseResultados.classList.remove('hidden');
-                gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out", delay: 0.2 });
-
+                gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out" });
                 const formData = new FormData();
                 formData.append('texto', txtEmail.value);
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
 
-                // Lógica de URL inteligente que funciona localmente E no deploy
                 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-                const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '../api/app';
+                const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '/api/app';
 
                 fetch(apiURL, {
                     method: 'POST',
@@ -165,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(data => {
                     boxAnaliseResultados.innerHTML = createResultadosHTML(data);
-                    animarResultados();
                     boxAnaliseResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     lucide.createIcons();
                     ativarBotaoCopiar();
