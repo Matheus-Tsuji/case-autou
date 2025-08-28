@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Lógica de URL inteligente que funciona localmente E no deploy
                 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-                const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '/api/app';
+                const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '../api/app';
 
                 fetch(apiURL, {
                     method: 'POST',
