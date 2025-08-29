@@ -76,44 +76,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnAnalisar) {
-        btnAnalisar.addEventListener('click', () => {
-            const temTexto = txtEmail.value.trim() !== '';
-            const temArquivo = fileUpload.files.length > 0;
-            if (temTexto || temArquivo) {
-                gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
-                boxAnaliseResultados.innerHTML = loadingHTML;
-                boxAnaliseResultados.classList.remove('hidden');
-                gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out" });
-                const formData = new FormData();
-                formData.append('texto', txtEmail.value);
-                if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
+    btnAnalisar.addEventListener('click', () => {
+        const temTexto = txtEmail.value.trim() !== '';
+        const temArquivo = fileUpload.files.length > 0;
 
-                const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-                const apiURL = isLocal ? 'http://127.0.0.1:5000/api/app' : '/api/app';
+        if (temTexto || temArquivo) {
+            gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
+            boxAnaliseResultados.innerHTML = loadingHTML;
+            boxAnaliseResultados.classList.remove('hidden');
+            gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out", delay: 0.2 });
 
-                fetch(apiURL, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Erro na resposta do servidor');
-                    return response.json();
-                })
-                .then(data => {
-                    boxAnaliseResultados.innerHTML = createResultadosHTML(data);
-                    boxAnaliseResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    lucide.createIcons();
-                    ativarBotaoCopiar();
-                    gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
-                })
-                .catch(error => {
-                    console.error('Erro na requisição:', error);
-                    boxAnaliseResultados.innerHTML = '<p style="color: red; text-align: center;">Erro ao conectar com o servidor.</p>';
-                    gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
-                });
-            } else {
-                alert('Por favor, insira o texto de um e-mail ou faça o upload de um arquivo para analisar.');
-            }
-        });
-    }
+            const formData = new FormData();
+            formData.append('texto', txtEmail.value);
+            if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
+
+            const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+
+            // ATENÇÃO: COLOQUE A URL DO SEU BACKEND DA RENDER AQUI QUANDO TIVER
+            const renderURL = 'COLE_A_URL_DO_SEU_BACKEND_DA_RENDER_AQUI'; 
+
+            const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
+
+            fetch(apiURL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Erro na resposta do servidor');
+                return response.json();
+            })
+            .then(data => {
+                boxAnaliseResultados.innerHTML = createResultadosHTML(data);
+                animarResultados();
+                boxAnaliseResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                lucide.createIcons();
+                ativarBotaoCopiar();
+                gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+                boxAnaliseResultados.innerHTML = '<p style="color: red; text-align: center;">Erro ao conectar com o servidor.</p>';
+                gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
+            });
+        } else {
+            alert('Por favor, insira o texto de um e-mail ou faça o upload de um arquivo para analisar.');
+        }
+    });
+}
 });
