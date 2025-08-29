@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
 
                 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-                const renderURL = 'https://case-autou-backend.onrender.com'; // Sua URL aqui
+                const renderURL = 'https://case-autou-backend.onrender.com/analisar'; // Sua URL aqui
                 const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
 
                 fetch(renderURL, {
