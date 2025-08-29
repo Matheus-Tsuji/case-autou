@@ -73,7 +73,7 @@ def analisar_email():
         return jsonify(resultado_final)
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"erro": "Ocorreu um erro interno grave no servidor."}), 500
+        return jsonify({"erro": "Ocorreu um erro interno grave no servidor."}),500
 
 if __name__ == '__main__':
     app.run(debug=True)
