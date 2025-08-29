@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
 
             // ATENÇÃO: COLOQUE A URL DO SEU BACKEND DA RENDER AQUI QUANDO TIVER
-            const renderURL = 'https://case-autou-nsov.onrender.com'; 
+            const renderURL = 'https://case-autou-msov.onrender.com'; 
 
             const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
 
