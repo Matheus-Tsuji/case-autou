@@ -152,12 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
 
                 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-                
-                // AQUI ESTÁ A CORREÇÃO FINAL E DEFINITIVA
-                const renderURL = 'https://case-autou-msov.onrender.com'; // Sua URL da Render
+                const renderURL = 'https://case-autou-backend.onrender.com'; // Sua URL aqui
                 const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
 
-                fetch(apiURL, {
+                fetch(renderURL, {
                     method: 'POST',
                     body: formData,
                     mode: 'cors' // Adicionado para garantir CORS
