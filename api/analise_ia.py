@@ -7,8 +7,8 @@ from dotenv import load_dotenv  # Para carregar variáveis do .env
 
 # === Configuração do cliente OpenAI ===
 # Carrega variáveis do arquivo .env (inclui a chave da API)
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# load_dotenv()
+client = OpenAI(api_key="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")
 
 # === Função principal de análise com IA ===
 def analisar_texto_com_ia(texto_email):
@@ -35,7 +35,7 @@ def analisar_texto_com_ia(texto_email):
     try:
         # Chama a API da OpenAI para obter a análise do texto
         response = client.chat.completions.create(
-            model="gpt-5-mini",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Você é um assistente de produtividade especialista em analisar e classificar emails. Responda sempre com um JSON válido."},
                 {"role": "user", "content": prompt}
