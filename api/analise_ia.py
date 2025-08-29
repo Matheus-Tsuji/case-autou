@@ -7,8 +7,8 @@ from dotenv import load_dotenv  # Para carregar variáveis do .env
 
 # === Configuração do cliente OpenAI ===
 # Carrega variáveis do arquivo .env (inclui a chave da API)
-# load_dotenv()
-client = OpenAI(api_key="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")
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # === Função principal de análise com IA ===
 def analisar_texto_com_ia(texto_email):
