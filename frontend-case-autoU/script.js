@@ -84,28 +84,31 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
             boxAnaliseResultados.innerHTML = loadingHTML;
             boxAnaliseResultados.classList.remove('hidden');
-            gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out", delay: 0.2 });
+            gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out" });
 
             const formData = new FormData();
             formData.append('texto', txtEmail.value);
             if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
 
             const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-
-            // ATENÇÃO: COLOQUE A URL DO SEU BACKEND DA RENDER AQUI QUANDO TIVER
-            const renderURL = 'https://case-autou-nsov.onrender.com';
-
-            const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
+            const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : 'https://case-autou-msov.onrender.com/analisar';
 
             fetch(apiURL, {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
-                if (!response.ok) throw new Error('Erro na resposta do servidor');
+                if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
                 return response.json();
             })
             .then(data => {
+                // VERIFICAÇÃO ADICIONADA AQUI:
+                // Se o JSON recebido contém uma chave 'erro', nós o tratamos como um erro.
+                if (data.erro) {
+                    throw new Error(data.detalhes || data.erro);
+                }
+
+                // Se não houver erro, continua normalmente
                 boxAnaliseResultados.innerHTML = createResultadosHTML(data);
                 animarResultados();
                 boxAnaliseResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -115,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Erro na requisição:', error);
-                boxAnaliseResultados.innerHTML = '<p style="color: red; text-align: center;">Erro ao conectar com o servidor.</p>';
+                // AGORA VAI MOSTRAR O ERRO REAL VINDO DO BACKEND
+                boxAnaliseResultados.innerHTML = `<p style="color: red; text-align: center;">${error.message}</p>`;
                 gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
             });
         } else {
