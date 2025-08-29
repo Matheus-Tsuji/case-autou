@@ -13,13 +13,13 @@ app = Flask(__name__)
 #   CONFIGURAÇÃO DE CORS EXPLÍCITA E ROBUSTA (A ALTERAÇÃO)
 #   Isto força o servidor a aceitar requisições de qualquer origem.
 # ===================================================================
-CORS(app, resources={r"/analisar": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
     return response
 
 # === Função auxiliar: leitura de arquivos DOCX ===

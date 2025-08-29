@@ -159,7 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 fetch(apiURL, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    mode: 'cors' // Adicionado para garantir CORS
                 })
                 .then(response => {
                     if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
