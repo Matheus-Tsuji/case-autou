@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
             boxAnaliseResultados.innerHTML = loadingHTML;
             boxAnaliseResultados.classList.remove('hidden');
-            gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out" });
+            gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out"  });
 
             const formData = new FormData();
             formData.append('texto', txtEmail.value);
