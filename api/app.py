@@ -4,14 +4,13 @@ from flask_cors import CORS
 import docx
 import fitz
 from analise_ia import analisar_texto_com_ia
-import traceback # Importado para o tratamento de erro
+import traceback  # Para debug de erros
 
 # === Inicialização do app Flask ===
 app = Flask(__name__)
 
 # ===================================================================
-#   CONFIGURAÇÃO DE CORS EXPLÍCITA E ROBUSTA (A ALTERAÇÃO)
-#   Isto força o servidor a aceitar requisições de qualquer origem.
+#   CONFIGURAÇÃO DE CORS EXPLÍCITA E ROBUSTA
 # ===================================================================
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
@@ -43,13 +42,17 @@ def ler_arquivo_pdf(arquivo_stream):
         return ""
 
 # === Rota principal da API: análise de e-mail ===
-@app.route('/analisar', methods=['POST'])
+@app.route('/analisar', methods=['POST', 'OPTIONS'])
 def analisar_email():
     """
     Recebe texto ou arquivo do frontend, consolida o conteúdo e envia para análise da IA.
     Retorna o resultado estruturado ou mensagem de erro.
     """
-    # ADICIONADO O TRATAMENTO DE ERRO GERAL (AIRBAG)
+
+    # Preflight request (OPTIONS)
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+
     try:
         texto_final_para_analise = ""
 
