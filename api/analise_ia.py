@@ -1,10 +1,12 @@
+
 # === Importações necessárias ===
-from openai import OpenAI
-import os
-import json
-from dotenv import load_dotenv
+from openai import OpenAI  # Biblioteca para acessar a API da OpenAI
+import os                  # Para acessar variáveis de ambiente
+import json                # Para manipular JSON
+from dotenv import load_dotenv  # Para carregar variáveis do .env
 
 # === Configuração do cliente OpenAI ===
+# Carrega variáveis do arquivo .env (inclui a chave da API)
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -12,7 +14,9 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def analisar_texto_com_ia(texto_email):
     """
     Envia o texto do e-mail para a API da OpenAI e retorna uma análise estruturada em JSON.
+    A resposta inclui classificação, confiança, análise, resposta sugerida e palavras-chave.
     """
+    # Monta o prompt para a IA, pedindo resposta em JSON estruturado
     prompt = f"""
     Analise o seguinte texto de um email e forneça uma análise completa no formato JSON. O email é:
     ---
@@ -29,18 +33,20 @@ def analisar_texto_com_ia(texto_email):
     """
 
     try:
+        # Chama a API da OpenAI para obter a análise do texto
         response = client.chat.completions.create(
-            # AQUI ESTÁ A CORREÇÃO:
-            model="gpt-3.5-turbo",
+            model="gpt-5-mini",
             messages=[
                 {"role": "system", "content": "Você é um assistente de produtividade especialista em analisar e classificar emails. Responda sempre com um JSON válido."},
                 {"role": "user", "content": prompt}
             ],
         )
 
+        # Extrai o JSON retornado pela IA e converte para dicionário Python
         json_response_string = response.choices[0].message.content
         resultado_analise = json.loads(json_response_string)
 
+        # Ajusta as chaves para compatibilidade com o frontend
         if 'resposta_sugerida' in resultado_analise:
             resultado_analise['resposta'] = resultado_analise.pop('resposta_sugerida')
         resultado_analise['nivelConfianca'] = "Alta" if resultado_analise.get('confianca', 0) > 80 else "Média"
@@ -49,6 +55,7 @@ def analisar_texto_com_ia(texto_email):
         return resultado_analise
 
     except Exception as e:
+        # Em caso de erro, retorna mensagem amigável e detalhes para debug
         print(f"Erro ao chamar a API da OpenAI: {e}")
         return {
             "erro": "Não foi possível analisar o texto com a IA.",
