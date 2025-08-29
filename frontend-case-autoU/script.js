@@ -1,26 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ===============================
-    // 1. Seleção dos elementos da interface
-    // ===============================
-    const uploadBox = document.getElementById('uploadBox');
-    const fileUpload = document.getElementById('fileUpload');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    const btnAnalisar = document.getElementById('btnAnalisar');
-    const txtEmail = document.getElementById('txtEmail');
-    const boxAnaliseResultados = document.getElementById('boxAnaliseResultados');
+    // Seleção dos principais elementos da interface
+    const uploadBox = document.getElementById('uploadBox'); // Área de upload (drag & drop)
+    const fileUpload = document.getElementById('fileUpload'); // Input de arquivo
+    const fileNameDisplay = document.getElementById('fileNameDisplay'); // Exibição do nome do arquivo
+    const btnAnalisar = document.getElementById('btnAnalisar'); // Botão para iniciar análise
+    const txtEmail = document.getElementById('txtEmail'); // Campo de texto para e-mail
+    const boxAnaliseResultados = document.getElementById('boxAnaliseResultados'); // Área de exibição dos resultados
 
-    // ===============================
-    // 2. Animação inicial da página (GSAP)
-    // ===============================
-    lucide.createIcons();
-    gsap.set(['header', '.boxPrincipal'], { autoAlpha: 0 });
-    const tl = gsap.timeline();
-    tl.to("header", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
-      .to(".boxPrincipal", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
+        // Animação inicial da página usando GSAP e inicialização dos ícones Lucide
+        lucide.createIcons(); // Renderiza ícones SVG
+        gsap.set(['header', '.boxPrincipal'], { autoAlpha: 0 }); // Esconde header e box principal
+        const tl = gsap.timeline();
+        tl.to("header", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
+            .to(".boxPrincipal", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
 
-    // ===============================
-    // 3. Upload de arquivo: drag & drop e seleção manual
-    // ===============================
+    // Função para atualizar o nome do arquivo exibido
     function atualizarNomeArquivo(input) {
         if (input.files.length > 0) {
             fileNameDisplay.textContent = input.files[0].name;
@@ -28,14 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
             fileNameDisplay.textContent = 'Nenhum arquivo selecionado.';
         }
     }
+
+    // Configuração do upload de arquivo (drag & drop e clique)
     if (uploadBox) {
+        // Clique na área de upload abre o seletor de arquivos
         uploadBox.addEventListener('click', () => fileUpload.click());
+        // Atualiza nome ao selecionar arquivo manualmente
         uploadBox.addEventListener('change', () => atualizarNomeArquivo(fileUpload));
+        // Efeito visual ao arrastar arquivo sobre a área
         uploadBox.addEventListener('dragover', (event) => {
             event.preventDefault();
             uploadBox.classList.add('dragover');
         });
+        // Remove efeito visual ao sair
         uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
+        // Ao soltar arquivo, atualiza input e nome
         uploadBox.addEventListener('drop', (event) => {
             event.preventDefault();
             uploadBox.classList.remove('dragover');
@@ -46,9 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ===============================
-    // 4. Sincronização dos inputs (texto x arquivo)
-    // ===============================
+    // Sincronização dos inputs: impede envio de texto e arquivo ao mesmo tempo
     fileUpload.addEventListener('change', () => {
         if (fileUpload.files.length > 0) txtEmail.value = '';
     });
@@ -59,9 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ===============================
-    // 5. HTML de loading durante análise
-    // ===============================
+    // HTML exibido durante o processamento da análise
     const loadingHTML = `
         <div class="analise-loading">
             <span class="loading-spinner"></span>
@@ -69,9 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
 
-    // ===============================
-    // 6. Monta o HTML dos resultados da análise
-    // ===============================
+    // Função que gera o HTML dos resultados da análise recebidos da API
     const createResultadosHTML = (dados) => {
         const tagClass = dados.classificacao.toLowerCase().includes('improdutivo') ? 'improdutivo' : 'produtivo';
         return `
@@ -98,9 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     };
 
-    // ===============================
-    // 7. Animação dos resultados (GSAP)
-    // ===============================
+    // Animação de entrada dos resultados usando GSAP
     function animarResultados() {
         const elementos = document.querySelectorAll('.resultados-container > *');
         gsap.from(elementos, {
@@ -112,9 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ===============================
-    // 8. Botão de copiar resposta sugerida
-    // ===============================
+    // Ativa funcionalidade do botão de copiar resposta sugerida para área de transferência
     function ativarBotaoCopiar() {
         const btnCopiar = document.getElementById('btnCopiar');
         if (btnCopiar) {
@@ -133,32 +124,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ===============================
-    // 9. Clique no botão "Analisar" (envia dados, anima, exibe resultado)
-    // ===============================
+    // Evento do botão "Analisar": envia dados para API, exibe loading, mostra resultados ou erro
     if (btnAnalisar) {
         btnAnalisar.addEventListener('click', () => {
             const temTexto = txtEmail.value.trim() !== '';
             const temArquivo = fileUpload.files.length > 0;
 
             if (temTexto || temArquivo) {
+                // Anima e mostra loading
                 gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 0.5, scale: 0.98, ease: "power2.in" });
                 boxAnaliseResultados.innerHTML = loadingHTML;
                 boxAnaliseResultados.classList.remove('hidden');
                 gsap.from(boxAnaliseResultados, { duration: 0.5, y: 50, autoAlpha: 0, ease: "power2.out", delay: 0.2 });
 
+                // Monta dados do formulário
                 const formData = new FormData();
                 formData.append('texto', txtEmail.value);
                 if (temArquivo) formData.append('arquivo', fileUpload.files[0]);
 
+                // URL da API (ajuste conforme ambiente)
                 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-                const renderURL = 'https://case-autou-backend.onrender.com/analisar'; // Sua URL aqui
-                const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
+                const renderURL = 'https://case-autou-backend.onrender.com/analisar';
+                // const apiURL = isLocal ? 'http://127.0.0.1:5000/analisar' : `${renderURL}/analisar`;
 
+                // Envia requisição para API
                 fetch(renderURL, {
                     method: 'POST',
                     body: formData,
-                    mode: 'cors' // Adicionado para garantir CORS
+                    mode: 'cors' // Garante CORS
                 })
                 .then(response => {
                     if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
@@ -166,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(data => {
                     if (data.erro) { throw new Error(data.detalhes || data.erro); }
+                    // Exibe resultados
                     boxAnaliseResultados.innerHTML = createResultadosHTML(data);
                     animarResultados();
                     boxAnaliseResultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -174,11 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
                 })
                 .catch(error => {
+                    // Exibe erro
                     console.error('Erro na requisição:', error);
                     boxAnaliseResultados.innerHTML = `<p style="color: red; text-align: center;">${error.message}</p>`;
                     gsap.to(".boxPrincipal", { duration: 0.5, autoAlpha: 1, scale: 1, ease: "power2.out" });
                 });
             } else {
+                // Nenhum dado para analisar
                 alert('Por favor, insira o texto de um e-mail ou faça o upload de um arquivo para analisar.');
             }
         });

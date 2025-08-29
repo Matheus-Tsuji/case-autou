@@ -67,4 +67,4 @@ Siga os passos abaixo para executar a aplicação na sua máquina.
 
 *Você pode testar a aplicação ao vivo no seguinte link:*
 
-**[INSIRA AQUI O LINK DO SEU DEPLOY NO VERCEL QUANDO ESTIVER PRONTO]**
+**(https://case-autou-git-main-matheus-tsujis-projects.vercel.app/)**
